@@ -140,6 +140,7 @@ docker compose down
 
 You can also build and run the image directly:
 
+**On Linux / macOS / Git Bash**:
 ```bash
 # 1. Build the production Docker image
 docker build -t backstage-app:latest .
@@ -153,6 +154,17 @@ docker run -it --rm \
   backstage-app:latest
 # (or: yarn docker:run)
 ```
+
+**On Windows PowerShell** (PowerShell uses single-line or backtick continuation `` ` `` instead of `\`):
+```powershell
+# 1. Build the production Docker image
+docker build -t backstage-app:latest .
+
+# 2. Run the container
+docker run -it --rm -p 7007:7007 -e GITLAB_TOKEN="glpat-4tkUQzgcZjEQ2DwzDP1FV2M6MQpvOjEKdTpwYzh6bA8.01.1708m32iy" --name backstage-app backstage-app:latest
+```
+
+> **Note for Windows users**: If you see `docker : The term 'docker' is not recognized`, make sure [Docker Desktop for Windows](https://www.docker.com/products/docker-desktop/) is installed and running.
 
 ### 3. Container Architecture Highlights
 - **Multi-Stage Build**:
