@@ -1,8 +1,27 @@
+# Git & OS metadata
 .git
+.DS_Store
+
+# Dependencies (installed freshly inside the Docker builder)
+node_modules
+packages/*/node_modules
+plugins/*/node_modules
 .yarn/cache
 .yarn/install-state.gz
-node_modules
-packages/*/src
-packages/*/node_modules
-plugins
+
+# Local build outputs
+dist
+dist-types
+packages/*/dist
+plugins/*/dist
+coverage
+
+# Logs
+*.log
+logs
+
+# Secrets and local overrides
+.env
+.env.test
 *.local.yaml
+*-credentials.yaml

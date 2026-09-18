@@ -107,6 +107,63 @@ yarn dev
 
 ---
 
+## Docker Deployment (Production Container)
+
+The project is fully containerized with a production-grade, multi-stage `Dockerfile` and `docker-compose.yml`. In containerized mode, Backstage runs as a unified single service on port `7007`, where the backend serves both API routes and the precompiled frontend bundle.
+
+### 1. One-Command Startup (Docker Compose)
+
+Ensure your `.env` file contains your `GITLAB_TOKEN`, then run:
+
+```bash
+docker compose up --build
+```
+*(Or via yarn script)*:
+```bash
+yarn docker:compose
+```
+
+- **Unified Backstage App & Backend**: [http://localhost:7007](http://localhost:7007)
+- **RBAC Dashboard**: [http://localhost:7007/rbac](http://localhost:7007/rbac)
+- **GitLab Demo Service CI/CD**: [http://localhost:7007/catalog/default/component/gitlab-demo-service/ci-cd](http://localhost:7007/catalog/default/component/gitlab-demo-service/ci-cd)
+
+To run in the background (detached):
+```bash
+docker compose up -d
+```
+To stop the container:
+```bash
+docker compose down
+```
+
+### 2. Manual Docker CLI Commands
+
+You can also build and run the image directly:
+
+```bash
+# 1. Build the production Docker image
+docker build -t backstage-app:latest .
+# (or: yarn docker:build)
+
+# 2. Run the container with environment variables
+docker run -it --rm \
+  -p 7007:7007 \
+  -e GITLAB_TOKEN=glpat-4tkUQzgcZjEQ2DwzDP1FV2M6MQpvOjEKdTpwYzh6bA8.01.1708m32iy \
+  --name backstage-app \
+  backstage-app:latest
+# (or: yarn docker:run)
+```
+
+### 3. Container Architecture Highlights
+- **Multi-Stage Build**:
+  - `builder` stage: Uses `node:20-bookworm` with `python3`, `g++`, and `make` to compile TypeScript packages, frontend web bundles (`packages/app/dist`), backend bundles, and internal plugins.
+  - `runner` stage: Minimal `node:20-bookworm-slim` with `dumb-init` for proper Linux signal forwarding and zombie process reaping.
+- **Security & Permissions**: Runs as unprivileged `node` user (`USER node`) instead of root.
+- **Optimized Image Size**: Strips development toolchains, git history, and dev dependencies, copying only release artifacts and production dependencies into `/app`.
+- **Runtime Configuration**: Uses `app-config.docker.yaml` specifying `baseUrl: http://localhost:7007`, in-memory SQLite database, and guest authentication provider.
+
+---
+
 ## Application Verification & Testing Flow
 
 ### Flow 1: Testing the Custom RBAC Plugin (Task 1)

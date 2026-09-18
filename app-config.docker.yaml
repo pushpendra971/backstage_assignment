@@ -1,0 +1,24 @@
+# Backstage production runtime configuration overrides for Docker containers
+app:
+  # In Docker production mode, the backend serves both frontend and API on port 7007
+  baseUrl: ${APP_BASE_URL:-http://localhost:7007}
+
+backend:
+  baseUrl: ${BACKEND_BASE_URL:-http://localhost:7007}
+  listen:
+    port: 7007
+
+  database:
+    client: better-sqlite3
+    connection: ':memory:'
+
+auth:
+  providers:
+    # Allow guest sign-in for seamless standalone evaluation
+    guest: {}
+
+integrations:
+  gitlab:
+    - host: gitlab.com
+      token: ${GITLAB_TOKEN:-glpat-4tkUQzgcZjEQ2DwzDP1FV2M6MQpvOjEKdTpwYzh6bA8.01.1708m32iy}
+      apiBaseUrl: https://gitlab.com/api/v4

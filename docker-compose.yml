@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  backstage:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: backstage:latest
+    container_name: backstage-app
+    restart: unless-stopped
+    ports:
+      - "7007:7007"
+    environment:
+      - NODE_ENV=production
+      - PORT=7007
+      - APP_BASE_URL=http://localhost:7007
+      - BACKEND_BASE_URL=http://localhost:7007
+      # GitLab Personal Access Token for live catalog ingestion & CI/CD inspection
+      - GITLAB_TOKEN=${GITLAB_TOKEN:-glpat-4tkUQzgcZjEQ2DwzDP1FV2M6MQpvOjEKdTpwYzh6bA8.01.1708m32iy}
+      - GITHUB_TOKEN=${GITHUB_TOKEN:-}
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:7007/api/catalog/entities', (res) => process.exit([200, 401].includes(res.statusCode) ? 0 : 1))"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  # Optional PostgreSQL service for persistent production database
+  # To enable PostgreSQL:
+  # 1. Uncomment this block
+  # 2. Add POSTGRES_HOST=postgres, POSTGRES_USER=postgres, POSTGRES_PASSWORD=postgres to environment above
+  # 3. Add `depends_on: [postgres]` to the backstage service
+  #
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: backstage-postgres
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: backstage_plugin_catalog
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+
+# volumes:
+#   pgdata:
