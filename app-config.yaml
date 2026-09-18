@@ -35,13 +35,11 @@ backend:
 integrations:
   github:
     - host: github.com
-      # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
-      # about setting up the GitHub integration here: https://backstage.io/docs/integrations/github/locations#configuration
       token: ${GITHUB_TOKEN}
-    ### Example for how to add your GitHub Enterprise instance using the API:
-    # - host: ghe.example.net
-    #   apiBaseUrl: https://ghe.example.net/api/v3
-    #   token: ${GHE_TOKEN}
+  gitlab:
+    - host: gitlab.com
+      token: ${GITLAB_TOKEN}
+      apiBaseUrl: https://gitlab.com/api/v4
 
 proxy:
   ### Example for how to add a proxy endpoint for the frontend.
@@ -82,6 +80,16 @@ catalog:
     - type: file
       target: ../../examples/entities.yaml
 
+    # GitLab Demo Service Component (Offline fallback / local cache; uncomment if testing without internet or token)
+    # - type: file
+    #   target: ../../examples/gitlab-service.yaml
+
+    # Live GitLab Repository Catalog Entity (Loaded via GITLAB_TOKEN)
+    - type: url
+      target: https://gitlab.com/4rtyuikl-group/demo/-/blob/main/catalog-info.yaml
+      rules:
+        - allow: [Component, System, API, Resource, Location]
+
     # Local example template
     - type: file
       target: ../../examples/template/template.yaml
@@ -103,3 +111,11 @@ catalog:
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
     #   rules:
     #     - allow: [User, Group]
+
+rbac:
+  users:
+    'user:default/admin': 'platform-admin'
+    'user:default/developer': 'developer'
+    'user:default/viewer': 'viewer'
+    'user:default/guest': 'viewer'
+

@@ -15,3 +15,34 @@ metadata:
 spec:
   type: team
   children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: pushpendra971
+spec:
+  profile:
+    displayName: Pushpendra Singh
+    email: pushpendra971@example.com
+  memberOf: [team-platform]
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: team-platform
+spec:
+  type: team
+  profile:
+    displayName: Platform Engineering
+  children: []
+---
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: pushpendra971
+spec:
+  type: team
+  profile:
+    displayName: Pushpendra Singh
+  children: []
+

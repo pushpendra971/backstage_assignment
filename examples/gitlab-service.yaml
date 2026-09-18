@@ -1,0 +1,34 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: gitlab-demo-service
+  title: GitLab Cloud Service
+  description: Core microservice hosted on GitLab with automated GitLab CI/CD pipelines
+  tags:
+    - gitlab
+    - typescript
+    - production
+    - microservice
+  links:
+    - url: https://gitlab.com/4rtyuikl-group/demo
+      title: GitLab Repository
+      icon: gitlab
+    - url: https://gitlab.com/4rtyuikl-group/demo/-/pipelines
+      title: GitLab CI/CD Pipelines
+      icon: dashboard
+    - url: https://gitlab.com/4rtyuikl-group/demo/-/issues
+      title: GitLab Issue Tracker
+      icon: help
+  annotations:
+    gitlab.com/project-slug: '4rtyuikl-group/demo'
+    gitlab.com/project-id: '86595677'
+    backstage.io/source-location: 'url:https://gitlab.com/4rtyuikl-group/demo'
+    backstage.io/view-url: 'https://gitlab.com/4rtyuikl-group/demo'
+    backstage.io/edit-url: 'https://gitlab.com/4rtyuikl-group/demo/-/edit/main/catalog-info.yaml'
+    backstage.io/managed-by-location: 'url:https://gitlab.com/4rtyuikl-group/demo/-/blob/main/catalog-info.yaml'
+    backstage.io/techdocs-ref: 'dir:.'
+spec:
+  type: service
+  lifecycle: production
+  owner: team-platform
+  system: platform-core
